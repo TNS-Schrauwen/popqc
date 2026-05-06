@@ -1,6 +1,5 @@
 //! Integration test: Run with test QC 500-sample data
 
-
 use popqc_core::config::PopQCConfig;
 use popqc_discovery::DiscoveryEngine;
 use std::collections::HashSet;
