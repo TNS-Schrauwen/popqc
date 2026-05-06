@@ -4,9 +4,9 @@
   <img src="img/popqc_logo.png" alt="PopQC Logo" width="200" />
 </div>
 
-**Population-level Quality Control and QC Outlier Detection for Genomics Datasets**
+**Population-level Quality Control and QC Outlier Detection for Large Cohort Genomics Datasets**
 
-[![CI](https://github.com/popqc/popqc/actions/workflows/ci.yml/badge.svg)](https://github.com/popqc/popqc/actions)
+[![CI](https://github.com/TNS-Schrauwen/popqc/actions/workflows/ci.yml/badge.svg)](https://github.com/TNS-Schrauwen/popqc/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 PopQC is a fast, scalable QC reporting tool that generates interactive HTML reports for quality control analysis of large genomics datasets. It can process QC logs from **any genomics workflow** including RNA-seq, WGS, WES, variant calling, single-cell, long-read sequencing, and more.
