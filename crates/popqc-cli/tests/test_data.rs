@@ -1,7 +1,7 @@
-use std::path::PathBuf;
-use std::collections::HashSet;
 use popqc_core::config::PopQCConfig;
 use popqc_discovery::DiscoveryEngine;
+use std::collections::HashSet;
+use std::path::PathBuf;
 
 fn fixtures_dir() -> PathBuf {
     let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
@@ -34,13 +34,19 @@ fn test_discovery_finds_all_synthetic_files() {
         if let Ok(entries) = std::fs::read_dir(&qc_dir) {
             for entry in entries.flatten() {
                 let meta = entry.metadata().unwrap();
-                eprintln!("  {} ({} bytes)", entry.file_name().to_string_lossy(), meta.len());
+                eprintln!(
+                    "  {} ({} bytes)",
+                    entry.file_name().to_string_lossy(),
+                    meta.len()
+                );
             }
         }
     } else {
         // Also check if the parent directories exist
         eprintln!("Parent exists: {}", qc_dir.parent().unwrap().exists());
-        let workspace = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("..").join("..");
+        let workspace = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("..")
+            .join("..");
         eprintln!("Workspace root contents:");
         if let Ok(entries) = std::fs::read_dir(&workspace) {
             for entry in entries.flatten() {
@@ -54,7 +60,8 @@ fn test_discovery_finds_all_synthetic_files() {
     let frame = engine.run(&[qc_dir.clone()]).unwrap();
 
     assert_eq!(
-        frame.num_samples(), 500,
+        frame.num_samples(),
+        500,
         "Expected 500 unique samples, got {}",
         frame.num_samples()
     );
@@ -118,7 +125,9 @@ fn test_metrics_have_expected_ranges() {
     let engine = DiscoveryEngine::new();
     let frame = engine.run(&[qc_dir]).unwrap();
 
-    let star_metric = frame.metric_ids().iter()
+    let star_metric = frame
+        .metric_ids()
+        .iter()
         .find(|m| m.contains("uniquely_mapped_percent"))
         .cloned();
 
@@ -126,7 +135,11 @@ fn test_metrics_have_expected_ranges() {
         let values = frame.metric_values_non_null(&metric_id);
         assert!(!values.is_empty(), "No STAR alignment values found");
         for &v in &values {
-            assert!((0.0..=100.0).contains(&v), "STAR alignment {} out of range", v);
+            assert!(
+                (0.0..=100.0).contains(&v),
+                "STAR alignment {} out of range",
+                v
+            );
         }
         let min_val = values.iter().copied().fold(f64::INFINITY, f64::min);
         let max_val = values.iter().copied().fold(f64::NEG_INFINITY, f64::max);
@@ -244,18 +257,40 @@ fn test_report_generation_with_synthetic_data() {
     let content = std::fs::read_to_string(&output).unwrap();
     let size = content.len();
 
-    assert!(content.contains("plotly"), "Report should include Plotly.js");
-    assert!(content.contains("PopQC") || content.contains("popqc"), "Report should have PopQC branding");
-    assert!(content.contains("sample1"), "Report should contain sample data");
-    assert!(content.contains("Sample Table"), "Report should have Sample Table tab");
-    assert!(content.contains("Explore"), "Report should have Explore tab");
+    assert!(
+        content.contains("plotly"),
+        "Report should include Plotly.js"
+    );
+    assert!(
+        content.contains("PopQC") || content.contains("popqc"),
+        "Report should have PopQC branding"
+    );
+    assert!(
+        content.contains("sample1"),
+        "Report should contain sample data"
+    );
+    assert!(
+        content.contains("Sample Table"),
+        "Report should have Sample Table tab"
+    );
+    assert!(
+        content.contains("Explore"),
+        "Report should have Explore tab"
+    );
     assert!(content.contains("PCA"), "Report should have PCA tab");
-    assert!(content.contains("Compare"), "Report should have Compare tab");
+    assert!(
+        content.contains("Compare"),
+        "Report should have Compare tab"
+    );
 
     assert!(size > 100_000, "Report too small: {} bytes", size);
     assert!(size < 100_000_000, "Report too large: {} bytes", size);
 
-    println!("Report generated: {} ({:.1} MB)", output.display(), size as f64 / 1_048_576.0);
+    println!(
+        "Report generated: {} ({:.1} MB)",
+        output.display(),
+        size as f64 / 1_048_576.0
+    );
 
     std::fs::remove_file(&output).ok();
 }
