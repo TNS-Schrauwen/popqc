@@ -65,7 +65,6 @@ pub struct SamplesConfig {
     pub group_columns: Vec<String>,
 }
 
-
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReportConfig {
     pub title: String,

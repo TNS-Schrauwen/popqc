@@ -31,24 +31,32 @@ pub struct Thresholds {
 impl Thresholds {
     #[must_use]
     pub fn evaluate(&self, value: f64) -> ThresholdLevel {
-    if let Some(fl) = self.fail_low && value < fl {
-        return ThresholdLevel::Fail;
-    }
+        if let Some(fl) = self.fail_low
+            && value < fl
+        {
+            return ThresholdLevel::Fail;
+        }
 
-    if let Some(fh) = self.fail_high && value > fh {
-        return ThresholdLevel::Fail;
-    }
+        if let Some(fh) = self.fail_high
+            && value > fh
+        {
+            return ThresholdLevel::Fail;
+        }
 
-    if let Some(wl) = self.warn_low && value < wl {
-        return ThresholdLevel::Warn;
-    }
+        if let Some(wl) = self.warn_low
+            && value < wl
+        {
+            return ThresholdLevel::Warn;
+        }
 
-    if let Some(wh) = self.warn_high && value > wh {
-        return ThresholdLevel::Warn;
-    }
+        if let Some(wh) = self.warn_high
+            && value > wh
+        {
+            return ThresholdLevel::Warn;
+        }
 
-    ThresholdLevel::Pass
-}
+        ThresholdLevel::Pass
+    }
 
     #[must_use]
     pub fn from_iqr(values: &[f64], factor: f64) -> Self {

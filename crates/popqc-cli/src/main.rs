@@ -217,7 +217,11 @@ fn load_metadata(
         columns[id_col_idx], id_col_idx
     );
     let normalizer = SampleNameNormalizer::default();
-    let qc_sample_names: Vec<String> = frame.sample_names().iter().map(ToString::to_string).collect();
+    let qc_sample_names: Vec<String> = frame
+        .sample_names()
+        .iter()
+        .map(ToString::to_string)
+        .collect();
     let mut exact_index: std::collections::HashMap<String, String> =
         std::collections::HashMap::new();
     let mut normalized_index: std::collections::HashMap<String, String> =
@@ -259,7 +263,7 @@ fn load_metadata(
                 if !val.is_empty() && val != "NA" && val != "N/A" && val != "." {
                     let clean_col = col_name
                         .replace(['(', ')'], "")
-                        .replace(['-','_'], "")
+                        .replace(['-', '_'], "")
                         .replace('/', "_")
                         .trim()
                         .to_string();
