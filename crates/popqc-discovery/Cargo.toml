@@ -1,0 +1,18 @@
+[package]
+name = "popqc-discovery"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "File discovery engine for PopQC"
+
+[dependencies]
+popqc-core = { path = "../popqc-core" }
+popqc-parsers = { path = "../popqc-parsers" }
+walkdir = { workspace = true }
+globset = { workspace = true }
+rayon = { workspace = true }
+tracing = { workspace = true }
+
+[lints]
+workspace = true

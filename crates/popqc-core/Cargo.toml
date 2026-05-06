@@ -1,0 +1,19 @@
+[package]
+name = "popqc-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Core data types and traits for PopQC"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+arrow = { workspace = true }
+parquet = { workspace = true }
+chrono = { workspace = true }
+rayon = { workspace = true }
+
+[lints]
+workspace = true

@@ -1,0 +1,25 @@
+[package]
+name = "popqc"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Population-level Quality Control and QC Outlier Detection for Genomics Datasets"
+
+[[bin]]
+name = "popqc"
+path = "src/main.rs"
+
+[dependencies]
+popqc-core = { path = "../popqc-core" }
+popqc-parsers = { path = "../popqc-parsers" }
+popqc-discovery = { path = "../popqc-discovery" }
+popqc-report = { path = "../popqc-report" }
+clap = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+anyhow = { workspace = true }
+indicatif = { workspace = true }
+
+[lints]
+workspace = true

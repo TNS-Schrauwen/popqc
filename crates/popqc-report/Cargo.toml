@@ -1,0 +1,17 @@
+[package]
+name = "popqc-report"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Interactive HTML report generator for PopQC"
+
+[dependencies]
+popqc-core = { path = "../popqc-core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+chrono = { workspace = true }
+tracing = { workspace = true }
+
+[lints]
+workspace = true

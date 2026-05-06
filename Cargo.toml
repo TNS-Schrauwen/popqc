@@ -1,0 +1,77 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/popqc-core",
+    "crates/popqc-parsers",
+    "crates/popqc-discovery",
+    "crates/popqc-report",
+    "crates/popqc-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+authors = ["Jash Trivedi <jashtrivedi221@gmail.com>"]
+license = "MIT"
+repository = "https://github.com/TNS-Schrauwen/popqc"
+description = "Population-level Quality Control for Genomics Datasets"
+rust-version = "1.85"
+
+[workspace.dependencies]
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# CLI
+clap = { version = "4.6", features = ["derive", "env", "wrap_help"] }
+
+# Data processing
+arrow = { version = "58.1", features = ["prettyprint"] }
+parquet = { version = "58.1", features = ["arrow"] }
+
+# Parallelism
+rayon = "1.12"
+
+# File walking
+walkdir = "2.5"
+globset = "0.4"
+regex = "1.12"
+
+# Error handling
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+# Hashing / IDs
+sha2 = "0.10"
+
+# CSV/TSV parsing
+csv = "1.4"
+
+# Template
+minijinja = { version = "2.19", features = ["loader"] }
+
+# Time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Progress
+indicatif = "0.18"
+
+# Python bindings (optional)
+pyo3 = { version = "0.28", features = ["extension-module"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"
+pedantic = "warn"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+opt-level = 3
