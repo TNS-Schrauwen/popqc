@@ -1,7 +1,7 @@
 //! Integration test: Run with test QC 500-sample data
 
+
 use popqc_core::config::PopQCConfig;
-use popqc_core::model::CohortFrame;
 use popqc_discovery::DiscoveryEngine;
 use std::collections::HashSet;
 use std::path::PathBuf;
@@ -155,7 +155,7 @@ fn test_metadata_loading() {
 
     // Load metadata
     let content = std::fs::read_to_string(&meta).unwrap();
-    let normalizer = popqc_core::normalize::SampleNameNormalizer::default();
+    let _normalizer = popqc_core::normalize::SampleNameNormalizer::default();
 
     let mut lines = content.lines();
     let header = lines.next().unwrap();
