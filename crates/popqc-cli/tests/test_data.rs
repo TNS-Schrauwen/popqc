@@ -4,10 +4,7 @@ use std::collections::HashSet;
 use std::path::PathBuf;
 
 fn fixtures_dir() -> PathBuf {
-    let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let workspace_root = manifest_dir.join("..").join("..");
-    let workspace_root = workspace_root.canonicalize().unwrap_or(workspace_root);
-    workspace_root
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("tests")
         .join("fixtures")
         .join("test_data")
@@ -44,9 +41,7 @@ fn test_discovery_finds_all_synthetic_files() {
     } else {
         // Also check if the parent directories exist
         eprintln!("Parent exists: {}", qc_dir.parent().unwrap().exists());
-        let workspace = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-            .join("..")
-            .join("..");
+        let workspace = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         eprintln!("Workspace root contents:");
         if let Ok(entries) = std::fs::read_dir(&workspace) {
             for entry in entries.flatten() {
