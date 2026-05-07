@@ -1,0 +1,214 @@
+---
+kind: pipeline
+type: docker
+name: build-amd64
+platform:
+  arch: amd64
+  os: linux
+
+trigger:
+  event:
+    - push
+    - tag
+
+steps:
+  - name: build-test-image
+    image: docker:29-cli
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - docker build -t popqc:${DRONE_COMMIT_SHA} .
+
+  - name: format-check
+    image: rust:1.95-trixie
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      -  sh -c "rustup component add rustfmt clippy && cargo fmt --all -- --check && cargo clippy --workspace --all-targets -- -D warnings"
+    depends_on:
+      - build-test-image
+
+  - name: publish-branch
+    image: plugins/ecr
+    when:
+      event:
+        - push
+      branch:
+        exclude:
+          - main
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: lab/tools/popqc
+      registry: public.ecr.aws/g5k6b2r5
+      region: us-west-2
+      tags:
+        - ${DRONE_BRANCH/\//-}-linux-amd64
+      create_repository: true
+    depends_on:
+      - format-check
+
+  - name: publish-main
+    image: plugins/ecr
+    when:
+      event:
+        - push
+      branch:
+        - main
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: lab/tools/popqc
+      registry: public.ecr.aws/g5k6b2r5
+      region: us-west-2
+      tags:
+        - main-linux-amd64
+        - latest-linux-amd64
+        - latest
+      create_repository: true
+    depends_on:
+      - format-check
+
+  - name: publish-tag
+    image: plugins/ecr
+    when:
+      event:
+        - tag
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: lab/tools/popqc
+      registry: public.ecr.aws/g5k6b2r5
+      region: us-west-2
+      tags:
+        - ${DRONE_TAG}-linux-amd64
+      create_repository: true
+    depends_on:
+      - format-check
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
+  - name: tmp
+    host:
+      path: /tmp
+---
+kind: pipeline
+type: docker
+name: build-arm64
+platform:
+  arch: arm64
+  os: linux
+
+trigger:
+  event:
+    - push
+    - tag
+
+steps:
+  - name: build-test-image
+    image: docker:29-cli
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - docker build -t popqc-arm64:${DRONE_COMMIT_SHA} .
+
+  - name: format-check
+    image: rust:1.95-trixie
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+      - name: tmp
+        path: /tmp
+    environment:
+      NXF_HOME: /tmp/nxf
+      NXF_WORK: /tmp/work
+    commands:
+      - |
+        nextflow run ci/smoke.nf \
+          -c ci/nextflow.config \
+          --container popqc-arm64:${DRONE_COMMIT_SHA} \
+          --command "wget -qO- https://example.com"
+      - cat results/smoke/smoke_output.txt
+    depends_on:
+      - build-test-image
+
+  - name: publish-branch
+    image: plugins/ecr
+    when:
+      event:
+        - push
+      branch:
+        exclude:
+          - main
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: lab/tools/popqc
+      registry: public.ecr.aws/g5k6b2r5
+      region: us-west-2
+      tags:
+        - ${DRONE_BRANCH/\//-}-linux-arm64
+      create_repository: true
+    depends_on:
+      - format-check
+
+  - name: publish-main
+    image: plugins/ecr
+    when:
+      event:
+        - push
+      branch:
+        - main
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: lab/tools/popqc
+      registry: public.ecr.aws/g5k6b2r5
+      region: us-west-2
+      tags:
+        - main-linux-arm64
+        - latest-linux-arm64
+      create_repository: true
+    depends_on:
+      - format-check
+
+  - name: publish-tag
+    image: plugins/ecr
+    when:
+      event:
+        - tag
+    settings:
+      access_key:
+        from_secret: aws_access_key_id
+      secret_key:
+        from_secret: aws_secret_access_key
+      repo: lab/tools/popqc
+      registry: public.ecr.aws/g5k6b2r5
+      region: us-west-2
+      tags:
+        - ${DRONE_TAG}-linux-arm64
+      create_repository: true
+    depends_on:
+      - format-check
+
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
+  - name: tmp
+    host:
+      path: /tmp
