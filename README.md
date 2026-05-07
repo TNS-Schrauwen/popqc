@@ -6,7 +6,7 @@
 
 **Population-level Quality Control and QC Outlier Detection for Large Cohort Genomics Datasets**
 
-![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)
+![Rust](https://img.shields.io/badge/rust-1.85+-orange.svg)
 ![Workflow](https://img.shields.io/github/actions/workflow/status/TNS-Schrauwen/popqc/ci.yml)
 ![nf-core](https://img.shields.io/badge/nf--core-compatible-brightgreen)
 [![CI](https://github.com/TNS-Schrauwen/popqc/actions/workflows/ci.yml/badge.svg)](https://github.com/TNS-Schrauwen/popqc/actions)
