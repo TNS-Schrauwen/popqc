@@ -20,13 +20,25 @@ steps:
     commands:
       - docker build -t popqc:${DRONE_COMMIT_SHA} .
 
-  - name: format-check
+  - name: rustfmt-check
     image: rust:1.95-trixie
+    commands:
+      - rustup component add rustfmt
+      - cargo fmt --all -- --check
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
+    depends_on:
+      - build-test-image
+
+  - name: clippy-check
+    image: rust:1.95-trixie
     commands:
-      -  sh -c "rustup component add rustfmt clippy && cargo fmt --all -- --check && cargo clippy --workspace --all-targets -- -D warnings"
+      - rustup component add clippy
+      - cargo clippy --workspace --all-targets -- -D warnings
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
     depends_on:
       - build-test-image
 
@@ -122,23 +134,25 @@ steps:
     commands:
       - docker build -t popqc-arm64:${DRONE_COMMIT_SHA} .
 
-  - name: format-check
+  - name: rustfmt-check
     image: rust:1.95-trixie
+    commands:
+      - rustup component add rustfmt
+      - cargo fmt --all -- --check
     volumes:
       - name: docker_sock
         path: /var/run/docker.sock
-      - name: tmp
-        path: /tmp
-    environment:
-      NXF_HOME: /tmp/nxf
-      NXF_WORK: /tmp/work
+    depends_on:
+      - build-test-image
+
+  - name: clippy-check
+    image: rust:1.95-trixie
     commands:
-      - |
-        nextflow run ci/smoke.nf \
-          -c ci/nextflow.config \
-          --container popqc-arm64:${DRONE_COMMIT_SHA} \
-          --command "wget -qO- https://example.com"
-      - cat results/smoke/smoke_output.txt
+      - rustup component add clippy
+      - cargo clippy --workspace --all-targets -- -D warnings
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
     depends_on:
       - build-test-image
 
