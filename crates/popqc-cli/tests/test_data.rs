@@ -1,3 +1,7 @@
+#![allow(clippy::uninlined_format_args)]
+#![allow(clippy::cast_precision_loss)]
+#![allow(clippy::cloned_ref_to_slice_refs)]
+
 use popqc_core::config::PopQCConfig;
 use popqc_discovery::DiscoveryEngine;
 use std::collections::HashSet;
