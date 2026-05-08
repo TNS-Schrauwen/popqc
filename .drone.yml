@@ -167,7 +167,7 @@ steps:
     depends_on:
       - build-test-image
 
-    - name: test-synthetic-data
+  - name: test-synthetic-data
     image: rust:1.95-trixie
     commands:
       - cargo test --workspace
