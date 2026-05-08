@@ -93,6 +93,34 @@ cp target/release/popqc ~/bin/
 cargo install --git https://github.com/TNS-Schrauwen/popqc.git
 ```
 
+### Build and Run with Docker
+
+The included `Dockerfile` builds PopQC in a Rust builder image and copies the compiled `popqc` binary into a smaller Debian runtime image.
+
+```bash
+# Build the image from the repository root
+docker build -t popqc .
+
+# Verify the installed CLI
+docker run --rm popqc --help
+
+# Generate a report from local MultiQC data
+docker run --rm \
+  -v "$PWD/path/to/multiqc_data:/data:ro" \
+  -v "$PWD/output:/output" \
+  popqc run /data -o /output/qc_report.html
+```
+
+If you use a metadata file, mount it into the container and pass its container path:
+
+```bash
+docker run --rm \
+  -v "$PWD/path/to/multiqc_data:/data:ro" \
+  -v "$PWD/path/to/metadata:/metadata:ro" \
+  -v "$PWD/output:/output" \
+  popqc run /data --metadata /metadata/samples.tsv -o /output/qc_report.html
+```
+
 ### Conda / Bioconda (coming soon)
 
 ```bash
@@ -188,7 +216,6 @@ For detailed usage instructions, please refer to our documentation:
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
-
 
 
 
