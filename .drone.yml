@@ -68,7 +68,7 @@ steps:
         from_secret: aws_secret_access_key
       repo: lab/tools/popqc
       registry: public.ecr.aws/g5k6b2r5
-      region: us-west-2
+      region: us-east-1
       tags:
         - ${DRONE_BRANCH/\//-}-linux-amd64
       create_repository: true
@@ -89,7 +89,7 @@ steps:
         from_secret: aws_secret_access_key
       repo: lab/tools/popqc
       registry: public.ecr.aws/g5k6b2r5
-      region: us-west-2
+      region: us-east-1
       tags:
         - main-linux-amd64
         - latest-linux-amd64
@@ -110,7 +110,7 @@ steps:
         from_secret: aws_secret_access_key
       repo: lab/tools/popqc
       registry: public.ecr.aws/g5k6b2r5
-      region: us-west-2
+      region: us-east-1
       tags:
         - ${DRONE_TAG}-linux-amd64
       create_repository: true
@@ -193,7 +193,7 @@ steps:
         from_secret: aws_secret_access_key
       repo: lab/tools/popqc
       registry: public.ecr.aws/g5k6b2r5
-      region: us-west-2
+      region: us-east-1
       tags:
         - ${DRONE_BRANCH/\//-}-linux-arm64
       create_repository: true
@@ -214,7 +214,7 @@ steps:
         from_secret: aws_secret_access_key
       repo: lab/tools/popqc
       registry: public.ecr.aws/g5k6b2r5
-      region: us-west-2
+      region: us-east-1
       tags:
         - main-linux-arm64
         - latest-linux-arm64
@@ -234,7 +234,7 @@ steps:
         from_secret: aws_secret_access_key
       repo: lab/tools/popqc
       registry: public.ecr.aws/g5k6b2r5
-      region: us-west-2
+      region: us-east-1
       tags:
         - ${DRONE_TAG}-linux-arm64
       create_repository: true
