@@ -1,0 +1,232 @@
+---
+kind: pipeline
+type: docker
+name: build-amd64
+platform:
+  arch: amd64
+  os: linux
+
+trigger:
+  event:
+    - push
+    - tag
+
+steps:
+  - name: build-test-image
+    image: docker:29-cli
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - docker build -t popqc:${DRONE_COMMIT_SHA} .
+
+  - name: rustfmt-check
+    image: rust:1.95-trixie
+    commands:
+      - rustup component add rustfmt
+      - cargo fmt --all -- --check
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    depends_on:
+      - build-test-image
+
+  - name: clippy-check
+    image: rust:1.95-trixie
+    commands:
+      - rustup component add clippy
+      - cargo clippy --workspace --all-targets -- -D warnings
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    depends_on:
+      - build-test-image
+
+  - name: test-synthetic-data
+    image: rust:1.95-trixie
+    commands:
+      - cargo test --workspace
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    depends_on:
+      - rustfmt-check
+      - clippy-check
+
+  - name: publish-branch
+    image: plugins/docker
+    when:
+      event:
+        - push
+      branch:
+        exclude:
+          - main
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
+      repo: damendo/popqc
+      tags:
+        - ${DRONE_BRANCH/\//-}-linux-amd64 
+    depends_on:
+      - test-synthetic-data
+
+  - name: publish-main
+    image: plugins/docker
+    when:
+      event:
+        - push
+      branch:
+        - main
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
+      repo: damendo/popqc
+      tags:
+        - main-linux-amd64
+        - latest-linux-amd64
+        - latest
+    depends_on:
+      - test-synthetic-data
+
+  - name: publish-tag
+    image: plugins/docker
+    when:
+      event:
+        - tag
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
+      repo: damendo/popqc
+      tags:
+        - ${DRONE_TAG}-linux-amd64
+    depends_on:
+      - test-synthetic-data
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
+  - name: tmp
+    host:
+      path: /tmp
+---
+kind: pipeline
+type: docker
+name: build-arm64
+platform:
+  arch: arm64
+  os: linux
+
+trigger:
+  event:
+    - push
+    - tag
+
+steps:
+  - name: build-test-image
+    image: docker:29-cli
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - docker build -t popqc-arm64:${DRONE_COMMIT_SHA} .
+
+  - name: rustfmt-check
+    image: rust:1.95-trixie
+    commands:
+      - rustup component add rustfmt
+      - cargo fmt --all -- --check
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    depends_on:
+      - build-test-image
+
+  - name: clippy-check
+    image: rust:1.95-trixie
+    commands:
+      - rustup component add clippy
+      - cargo clippy --workspace --all-targets -- -D warnings
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    depends_on:
+      - build-test-image
+
+  - name: test-synthetic-data
+    image: rust:1.95-trixie
+    commands:
+      - cargo test --workspace
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    depends_on:
+      - rustfmt-check
+      - clippy-check
+
+  - name: publish-branch
+    image: plugins/docker
+    when:
+      event:
+        - push
+      branch:
+        exclude:
+          - main
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
+      repo: damendo/popqc
+      tags:
+        - ${DRONE_BRANCH/\//-}-linux-arm64
+    depends_on:
+      - test-synthetic-data
+
+  - name: publish-main
+    image: plugins/docker
+    when:
+      event:
+        - push
+      branch:
+        - main
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
+      repo: damendo/popqc
+      tags:
+        - main-linux-arm64
+        - latest-linux-arm64
+    depends_on:
+      - test-synthetic-data
+
+  - name: publish-tag
+    image: plugins/docker
+    when:
+      event:
+        - tag
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
+      repo: damendo/popqc
+      tags:
+        - ${DRONE_TAG}-linux-arm64
+    depends_on:
+      - test-synthetic-data
+
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
+  - name: tmp
+    host:
+      path: /tmp
