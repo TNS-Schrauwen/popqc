@@ -54,7 +54,7 @@ steps:
       - clippy-check
 
   - name: publish-branch
-    image: plugins/ecr
+    image: plugins/docker
     when:
       event:
         - push
@@ -62,58 +62,49 @@ steps:
         exclude:
           - main
     settings:
-      access_key:
-        from_secret: aws_access_key_id
-      secret_key:
-        from_secret: aws_secret_access_key
-      repo: lab/tools/popqc
-      registry: public.ecr.aws/g5k6b2r5
-      region: us-east-1
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
+      repo: damendo/popqc
       tags:
-        - ${DRONE_BRANCH/\//-}-linux-amd64
-      create_repository: false
+        - ${DRONE_BRANCH/\//-}-linux-amd64 
     depends_on:
       - test-synthetic-data
 
   - name: publish-main
-    image: plugins/ecr
+    image: plugins/docker
     when:
       event:
         - push
       branch:
         - main
     settings:
-      access_key:
-        from_secret: aws_access_key_id
-      secret_key:
-        from_secret: aws_secret_access_key
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
       repo: lab/tools/popqc
-      registry: public.ecr.aws/g5k6b2r5
-      region: us-east-1
       tags:
         - main-linux-amd64
         - latest-linux-amd64
         - latest
-      create_repository: false
     depends_on:
       - test-synthetic-data
 
   - name: publish-tag
-    image: plugins/ecr
+    image: plugins/docker
     when:
       event:
         - tag
     settings:
-      access_key:
-        from_secret: aws_access_key_id
-      secret_key:
-        from_secret: aws_secret_access_key
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
       repo: lab/tools/popqc
-      registry: public.ecr.aws/g5k6b2r5
-      region: us-east-1
       tags:
         - ${DRONE_TAG}-linux-amd64
-      create_repository: false
     depends_on:
       - test-synthetic-data
 volumes:
@@ -179,7 +170,7 @@ steps:
       - clippy-check
 
   - name: publish-branch
-    image: plugins/ecr
+    image: plugins/docker
     when:
       event:
         - push
@@ -187,57 +178,48 @@ steps:
         exclude:
           - main
     settings:
-      access_key:
-        from_secret: aws_access_key_id
-      secret_key:
-        from_secret: aws_secret_access_key
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
       repo: lab/tools/popqc
-      registry: public.ecr.aws/g5k6b2r5
-      region: us-east-1
       tags:
         - ${DRONE_BRANCH/\//-}-linux-arm64
-      create_repository: false
     depends_on:
       - test-synthetic-data
 
   - name: publish-main
-    image: plugins/ecr
+    image: plugins/docker
     when:
       event:
         - push
       branch:
         - main
     settings:
-      access_key:
-        from_secret: aws_access_key_id
-      secret_key:
-        from_secret: aws_secret_access_key
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
       repo: lab/tools/popqc
-      registry: public.ecr.aws/g5k6b2r5
-      region: us-east-1
       tags:
         - main-linux-arm64
         - latest-linux-arm64
-      create_repository: false
     depends_on:
       - test-synthetic-data
 
   - name: publish-tag
-    image: plugins/ecr
+    image: plugins/docker
     when:
       event:
         - tag
     settings:
-      access_key:
-        from_secret: aws_access_key_id
-      secret_key:
-        from_secret: aws_secret_access_key
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_token
       repo: lab/tools/popqc
-      registry: public.ecr.aws/g5k6b2r5
-      region: us-east-1
       tags:
         - ${DRONE_TAG}-linux-arm64
-      create_repository: false
     depends_on:
       - test-synthetic-data
 
