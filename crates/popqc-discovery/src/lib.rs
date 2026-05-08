@@ -134,15 +134,18 @@ impl DiscoveryEngine {
 
         candidates
     }
+ 
     fn is_excluded(&self, path: &Path) -> bool {
-        path.components().any(|component| {
-            let comp = component.as_os_str();
+    let relative = path
+        .strip_prefix(std::env::current_dir().unwrap())
+        .unwrap_or(path);
 
-            self.exclude_patterns
-                .iter()
-                .any(|pat| comp == std::ffi::OsStr::new(pat))
-        })
-    }
+    relative.components().any(|component| {
+        let comp = component.as_os_str().to_string_lossy();
+        self.exclude_patterns.iter().any(|pat| pat == &comp)
+    })
+}
+    
 }
 
 impl Default for DiscoveryEngine {
