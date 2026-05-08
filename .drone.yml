@@ -42,6 +42,17 @@ steps:
     depends_on:
       - build-test-image
 
+  - name: test-synthetic-data
+    image: rust:1.95-trixie
+    commands:
+      - cargo test --workspace
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    depends_on:
+      - rustfmt-check
+      - clippy-check
+
   - name: publish-branch
     image: plugins/ecr
     when:
@@ -62,8 +73,7 @@ steps:
         - ${DRONE_BRANCH/\//-}-linux-amd64
       create_repository: true
     depends_on:
-      - rustfmt-check
-      - clippy-check
+      - test-synthetic-data
 
   - name: publish-main
     image: plugins/ecr
@@ -86,8 +96,7 @@ steps:
         - latest
       create_repository: true
     depends_on:
-      - rustfmt-check
-      - clippy-check
+      - test-synthetic-data
 
   - name: publish-tag
     image: plugins/ecr
@@ -106,8 +115,7 @@ steps:
         - ${DRONE_TAG}-linux-amd64
       create_repository: true
     depends_on:
-      - rustfmt-check
-      - clippy-check
+      - test-synthetic-data
 volumes:
   - name: docker_sock
     host:
@@ -159,6 +167,17 @@ steps:
     depends_on:
       - build-test-image
 
+    - name: test-synthetic-data
+    image: rust:1.95-trixie
+    commands:
+      - cargo test --workspace
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    depends_on:
+      - rustfmt-check
+      - clippy-check
+
   - name: publish-branch
     image: plugins/ecr
     when:
@@ -179,8 +198,7 @@ steps:
         - ${DRONE_BRANCH/\//-}-linux-arm64
       create_repository: true
     depends_on:
-      - rustfmt-check
-      - clippy-check
+      - test-synthetic-data
 
   - name: publish-main
     image: plugins/ecr
@@ -202,8 +220,7 @@ steps:
         - latest-linux-arm64
       create_repository: true
     depends_on:
-      - rustfmt-check
-      - clippy-check
+      - test-synthetic-data
 
   - name: publish-tag
     image: plugins/ecr
@@ -222,8 +239,7 @@ steps:
         - ${DRONE_TAG}-linux-arm64
       create_repository: true
     depends_on:
-      - rustfmt-check
-      - clippy-check
+      - test-synthetic-data
 
 volumes:
   - name: docker_sock
