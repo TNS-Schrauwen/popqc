@@ -244,7 +244,7 @@ steps:
       username:
         from_secret: docker_username
       password:
-        from_secret: docker_password
+        from_secret: docker_token
       target: damendo/popqc:latest
       template: damendo/popqc:main-OS-ARCH
       platforms:
@@ -271,9 +271,9 @@ steps:
       username:
         from_secret: docker_username
       password:
-        from_secret: docker_password
-      target: damendo/popqc:${DRONE_TAG}
-      template: damendo/popqc:${DRONE_TAG}-OS-ARCH
+        from_secret: docker_token
+      target: "damendo/popqc:${DRONE_TAG}"
+      template: "damendo/popqc:${DRONE_TAG}-OS-ARCH"
       platforms:
         - linux/amd64
         - linux/arm64
