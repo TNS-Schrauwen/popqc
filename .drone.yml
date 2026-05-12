@@ -69,6 +69,9 @@ steps:
       repo: damendo/popqc
       tags:
         - ${DRONE_BRANCH/\//-}-linux-amd64 
+      cache_from:
+        - damendo/popqc:${DRONE_COMMIT_BRANCH//\//-}-linux-amd64
+        - damendo/popqc:latest-linux-amd64
     depends_on:
       - test-synthetic-data
 
@@ -88,6 +91,9 @@ steps:
       tags:
         - main-linux-amd64
         - latest-linux-amd64
+      cache_from:
+        - damendo/popqc:${DRONE_COMMIT_BRANCH//\//-}-linux-amd64
+        - damendo/popqc:latest-linux-amd64
     depends_on:
       - test-synthetic-data
 
@@ -104,6 +110,9 @@ steps:
       repo: damendo/popqc
       tags:
         - ${DRONE_TAG}-linux-amd64
+      cache_from:
+        - damendo/popqc:${DRONE_COMMIT_BRANCH//\//-}-linux-amd64
+        - damendo/popqc:latest-linux-amd64
     depends_on:
       - test-synthetic-data
 volumes:
@@ -184,6 +193,9 @@ steps:
       repo: damendo/popqc
       tags:
         - ${DRONE_BRANCH/\//-}-linux-arm64
+      cache_from:
+        - damendo/popqc:${DRONE_COMMIT_BRANCH//\//-}-linux-arm64
+        - damendo/popqc:latest-linux-arm64
     depends_on:
       - test-synthetic-data
 
@@ -203,6 +215,9 @@ steps:
       tags:
         - main-linux-arm64
         - latest-linux-arm64
+      cache_from:
+        - damendo/popqc:${DRONE_COMMIT_BRANCH//\//-}-linux-arm64
+        - damendo/popqc:latest-linux-arm64
     depends_on:
       - test-synthetic-data
 
@@ -219,6 +234,9 @@ steps:
       repo: damendo/popqc
       tags:
         - ${DRONE_TAG}-linux-arm64
+      cache_from:
+        - damendo/popqc:${DRONE_COMMIT_BRANCH//\//-}-linux-arm64
+        - damendo/popqc:latest-linux-arm64
     depends_on:
       - test-synthetic-data
 
