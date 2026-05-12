@@ -136,10 +136,14 @@ impl DiscoveryEngine {
     }
 
     fn is_excluded(&self, path: &Path) -> bool {
-        let path_str = path.to_string_lossy();
-        self.exclude_patterns
-            .iter()
-            .any(|pat| path_str.contains(pat.as_str()))
+        let relative = path
+            .strip_prefix(std::env::current_dir().unwrap())
+            .unwrap_or(path);
+
+        relative.components().any(|component| {
+            let comp = component.as_os_str().to_string_lossy();
+            self.exclude_patterns.iter().any(|pat| pat == &comp)
+        })
     }
 }
 
