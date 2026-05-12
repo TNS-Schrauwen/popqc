@@ -68,7 +68,7 @@ steps:
         from_secret: docker_token
       repo: damendo/popqc
       tags:
-        - ${DRONE_BRANCH/\//-}-linux-amd64 
+        - ${DRONE_COMMIT_BRANCH//\//-}-linux-amd64 
       cache_from:
         - damendo/popqc:${DRONE_COMMIT_BRANCH//\//-}-linux-amd64
         - damendo/popqc:latest-linux-amd64
@@ -192,7 +192,7 @@ steps:
         from_secret: docker_token
       repo: damendo/popqc
       tags:
-        - ${DRONE_BRANCH/\//-}-linux-arm64
+        - ${DRONE_COMMIT_BRANCH//\//-}-linux-arm64
       cache_from:
         - damendo/popqc:${DRONE_COMMIT_BRANCH//\//-}-linux-arm64
         - damendo/popqc:latest-linux-arm64
@@ -269,6 +269,8 @@ steps:
         - linux/amd64
         - linux/arm64
 trigger:
+  event:
+    - push
   branch:
     include:
       - main
