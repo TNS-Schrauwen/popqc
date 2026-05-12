@@ -88,7 +88,6 @@ steps:
       tags:
         - main-linux-amd64
         - latest-linux-amd64
-        - latest
     depends_on:
       - test-synthetic-data
 
@@ -230,3 +229,56 @@ volumes:
   - name: tmp
     host:
       path: /tmp
+
+---
+name: manifest-latest
+kind: pipeline
+type: docker
+depends_on:
+  - build-amd64
+  - build-arm64
+steps:
+  - name: publish-manifest
+    image: plugins/manifest
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      target: damendo/popqc:latest
+      template: damendo/popqc:main-OS-ARCH
+      platforms:
+        - linux/amd64
+        - linux/arm64
+trigger:
+  branch:
+    include:
+      - main
+  status:
+    - success
+
+---
+name: manifest-tag
+kind: pipeline
+type: docker
+depends_on:
+  - build-amd64
+  - build-arm64
+steps:
+  - name: publish-manifest
+    image: plugins/manifest
+    settings:
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
+      target: damendo/popqc:${DRONE_TAG}
+      template: damendo/popqc:${DRONE_TAG}-OS-ARCH
+      platforms:
+        - linux/amd64
+        - linux/arm64
+trigger:
+  event:
+    - tag
+  status:
+    - success
