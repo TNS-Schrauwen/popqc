@@ -7,14 +7,16 @@
 **Population-level Quality Control and QC Outlier Detection for Large Cohort Genomics Datasets**
 
 ![Rust](https://img.shields.io/badge/rust-1.85+-orange.svg)
-![Workflow](https://img.shields.io/github/actions/workflow/status/TNS-Schrauwen/popqc/ci.yml)
+[![Docker Pulls](https://img.shields.io/docker/pulls/damendo/popqc)](https://hub.docker.com/r/damendo/popqc)
 ![nf-core](https://img.shields.io/badge/nf--core-compatible-brightgreen)
 [![CI](https://github.com/TNS-Schrauwen/popqc/actions/workflows/ci.yml/badge.svg)](https://github.com/TNS-Schrauwen/popqc/actions)
+[![Build Status](http://44.225.162.79/api/badges/TNS-Schrauwen/popqc/status.svg)](http://44.225.162.79/TNS-Schrauwen/popqc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-PopQC is a fast, scalable QC reporting tool that generates interactive HTML reports for quality control analysis of large genomics datasets. It can process QC logs from **any genomics workflow** including RNA-seq, WGS, WES, variant calling, single-cell, long-read sequencing, and more.
 
-PopQC auto-discovers QC outputs from common bioinformatics tools (e.g. MultiQC) and produces a single self-contained HTML report with interactive exploration capabilities designed for cohorts of 100 to 10,000+ samples.
+PopQC is a fast, scalable QC reporting tool that generates interactive HTML reports for quality control analysis of large cohort genomics datasets. It can process QC logs from **any genomics workflow** including RNA-seq, WGS, WES, variant calling, single-cell, long-read sequencing, and more.
+
+PopQC auto-discovers QC outputs from common bioinformatics tools (e.g. MultiQC) and produces a single self-contained HTML report with interactive outlier exploration capabilities designed for cohorts of 100 to 10,000+ samples.
 
 ---
 
@@ -87,7 +89,7 @@ cargo build --release
 cp target/release/popqc ~/bin/
 ```
 
-### Install via Cargo
+## Install via Cargo
 
 ```bash
 cargo install --git https://github.com/TNS-Schrauwen/popqc.git
@@ -216,6 +218,3 @@ For detailed usage instructions, please refer to our documentation:
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
-
-
-
