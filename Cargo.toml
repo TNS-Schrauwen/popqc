@@ -27,7 +27,7 @@ clap = { version = "4.6", features = ["derive", "env", "wrap_help"] }
 
 # Data processing
 arrow = { version = "58.1", features = ["prettyprint"] }
-parquet = { version = "58.1", features = ["arrow"] }
+parquet = { version = "58.3", features = ["arrow"] }
 
 # Parallelism
 rayon = "1.12"
