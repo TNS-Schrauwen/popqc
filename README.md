@@ -1,20 +1,27 @@
-# PopQC
+<h1 align="center">PopQC</h1>
 
 <div align="center">
   <img src="img/popqc_logo.png" alt="PopQC Logo" width="200" />
 </div>
 
-**Population-level Quality Control and QC Outlier Detection for Large Cohort Genomics Datasets**
+<p align="center">
+  <strong>Population-level Quality Control and Outlier Detection for Large Cohort Genomics Datasets</strong>
+</p>
 
-![Rust](https://img.shields.io/badge/rust-1.85+-orange.svg)
+<div align="center">
+
+[![Rust](https://img.shields.io/badge/rust-1.85+-orange.svg)](https://releases.rs/docs/1.85.0/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/damendo/popqc)](https://hub.docker.com/r/damendo/popqc)
 ![nf-core](https://img.shields.io/badge/nf--core-compatible-brightgreen)
-[![CI](https://github.com/TNS-Schrauwen/popqc/actions/workflows/ci.yml/badge.svg)](https://github.com/TNS-Schrauwen/popqc/actions)
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/popqc/badges/version.svg)](https://anaconda.org/bioconda/popqc)
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/popqc/badges/downloads.svg)](https://anaconda.org/bioconda/popqc)
 [![Build Status](http://44.225.162.79/api/badges/TNS-Schrauwen/popqc/status.svg)](http://44.225.162.79/TNS-Schrauwen/popqc)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/popqc/badges/platforms.svg)](https://anaconda.org/bioconda/popqc)
 
+</div>
 
-PopQC is a fast, scalable QC reporting tool that generates interactive HTML reports for quality control analysis of large cohort genomics datasets. It can process QC logs from **any genomics workflow** including RNA-seq, WGS, WES, variant calling, single-cell, long-read sequencing, and more.
+PopQC is a fast, scalable QC reporting tool that generates interactive HTML reports for quality control and outlier analysis of large cohort genomics datasets. It can process QC logs from **any genomics workflow** including RNA-seq, WGS, WES, variant calling, single-cell, long-read sequencing, and more.
 
 PopQC auto-discovers QC outputs from common bioinformatics tools (e.g. MultiQC) and produces a single self-contained HTML report with interactive outlier exploration capabilities designed for cohorts of 100 to 10,000+ samples.
 
@@ -36,39 +43,56 @@ PopQC solves these problems by generating interactive, self-contained HTML repor
 
 ## Installation
 
-### Pre-built Binaries (Recommended)
+### Conda / Bioconda
+
+```bash
+conda install bioconda::popqc
+
+# Verify installation
+popqc --version
+popqc --help
+```
+
+### Docker
+
+Pull the pre-built PopQC image from Docker Hub:
+
+```bash
+docker pull damendo/popqc
+
+# Verify the installed CLI
+docker run --rm damendo/popqc --help
+
+# Generate a report from local MultiQC data
+docker run --rm \
+  -v "$PWD/path/to/multiqc_data:/data:ro" \
+  -v "$PWD/output:/output" \
+  damendo/popqc run /data -o /output/qc_report.html
+```
+
+<p align="justify">
+If you use a metadata file, mount it into the container and pass its container path:
+</p>
+
+```bash
+docker run --rm \
+  -v "$PWD/path/to/multiqc_data:/data:ro" \
+  -v "$PWD/path/to/metadata:/metadata:ro" \
+  -v "$PWD/output:/output" \
+  damendo/popqc run /data --metadata /metadata/samples.tsv -o /output/qc_report.html
+```
+
+### Pre-built Binaries
 
 Download the latest release for your platform from the [Releases page](https://github.com/TNS-Schrauwen/popqc/releases):
 
 ```bash
 # Linux (x86_64)
-curl -LO https://github.com/popqc/popqc/releases/latest/download/popqc-linux-x86_64.tar.gz
+curl -LO https://github.com/TNS-Schrauwen/popqc/releases/latest/download/popqc-linux-x86_64.tar.gz
 tar -xzf popqc-linux-x86_64.tar.gz
 sudo mv popqc /usr/local/bin/
 
 # Verify installation
-popqc --version
-```
-
-
-# Install on HPC
-
-### For HPC environments where you do not have sudo access:
-
-```bash
-# Download the Linux binary
-curl -LO https://github.com/TNS-Schrauwen/popqc/releases/latest/download/popqc-linux-x86_64.tar.gz
-tar -xzf popqc-linux-x86_64.tar.gz
-
-# Move to a directory in your PATH (e.g., ~/bin)
-mkdir -p ~/bin
-mv popqc ~/bin/
-
-# Add to PATH if not already (add to ~/.bashrc for persistence)
-export PATH="$HOME/bin:$PATH"
-echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
-
-# Verify
 popqc --version
 ```
 
@@ -95,40 +119,6 @@ cp target/release/popqc ~/bin/
 cargo install --git https://github.com/TNS-Schrauwen/popqc.git
 ```
 
-### Build and Run with Docker
-
-The included `Dockerfile` builds PopQC in a Rust builder image and copies the compiled `popqc` binary into a smaller Debian runtime image.
-
-```bash
-# Build the image from the repository root
-docker build -t popqc .
-
-# Verify the installed CLI
-docker run --rm popqc --help
-
-# Generate a report from local MultiQC data
-docker run --rm \
-  -v "$PWD/path/to/multiqc_data:/data:ro" \
-  -v "$PWD/output:/output" \
-  popqc run /data -o /output/qc_report.html
-```
-
-If you use a metadata file, mount it into the container and pass its container path:
-
-```bash
-docker run --rm \
-  -v "$PWD/path/to/multiqc_data:/data:ro" \
-  -v "$PWD/path/to/metadata:/metadata:ro" \
-  -v "$PWD/output:/output" \
-  popqc run /data --metadata /metadata/samples.tsv -o /output/qc_report.html
-```
-
-### Conda / Bioconda (coming soon)
-
-```bash
-conda install -c bioconda popqc
-```
-
 ---
 
 ## Quick Start
@@ -142,13 +132,12 @@ popqc run path/to/multiqc/data/ --metadata path/to/metadata/samples.tsv -o qc_re
 
 ```
 
----
 
-# Usage
+## Usage
 
-## Command: popqc run
+### Command: popqc run
 
-Auto-discover QC files and generate an interactive report.
+<p align="justify">Auto-discover QC files and generate an interactive report.</p>
 
 ```bash
 Usage: popqc run [OPTIONS] <PATHS>...

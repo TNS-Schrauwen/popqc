@@ -1,0 +1,13 @@
+blank_issues_enabled: false
+contact_links:
+  - name: PopQC User Guide
+    url: https://github.com/TNS-Schrauwen/popqc/blob/main/docs/user_guide.md
+    about: Please check the documentation for usage questions.
+  - name: Ask a Question
+    url: https://github.com/TNS-Schrauwen/popqc/discussions/new?category=q-a
+    about: For questions that are not bug reports or feature requests.
+  - name: Security Vulnerability Report
+    url: https://github.com/TNS-Schrauwen/popqc/security/advisories/new
+    about: Please report security vulnerabilities privately.
+
+
