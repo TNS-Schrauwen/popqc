@@ -8,3 +8,10 @@ updates:
     labels:
       - "dependencies"
       - "rust"
+    groups:
+      cargo-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
