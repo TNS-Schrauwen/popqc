@@ -1028,7 +1028,7 @@ checksum = "19f132c84eca552bf34cab8ec81f1c1dcc229b811638f9d283dceabe58c5569e"
 
 [[package]]
 name = "popqc"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "anyhow",
  "clap",
@@ -1043,7 +1043,7 @@ dependencies = [
 
 [[package]]
 name = "popqc-core"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "arrow",
  "chrono",
@@ -1056,7 +1056,7 @@ dependencies = [
 
 [[package]]
 name = "popqc-discovery"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "globset",
  "popqc-core",
@@ -1068,7 +1068,7 @@ dependencies = [
 
 [[package]]
 name = "popqc-parsers"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "csv",
  "popqc-core",
@@ -1080,7 +1080,7 @@ dependencies = [
 
 [[package]]
 name = "popqc-report"
-version = "0.1.1"
+version = "0.2.0"
 dependencies = [
  "chrono",
  "popqc-core",
